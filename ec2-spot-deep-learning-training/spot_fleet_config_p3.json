@@ -3,11 +3,11 @@
   "IamFleetRole": "arn:aws:iam::317231741751:role/DL-Training-Spot-Fleet-Role",
   "LaunchSpecifications": [
       {
-          "ImageId": "ami-0027dfad6168539c7",
+          "ImageId": "ami-0e4233e130111dd2b",
           "KeyName": "aws-handson",
           "SecurityGroups": [
               {
-                  "GroupId": "sg-0add0ee2a651193a6"
+                  "GroupId": "sg-07ff2a1d3cd30e684"
               }
           ],
           "InstanceType": "p3.2xlarge",

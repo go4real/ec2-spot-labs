@@ -11,6 +11,7 @@ import datetime
 import time
 import requests
 import glob
+import boto3
 
 
 #%% Load and prepare datasets
@@ -89,10 +90,17 @@ def define_callbacks(volume_mount_dir, checkpoint_path, checkpoint_names, today_
 
 #%%
 def main():
+    sns = boto3.client('sns')
+    # Update training termination
+    response = sns.publish(
+        TopicArn='arn:aws:sns:ap-northeast-2:317231741751:SpotExecutionStatus',    
+        Message='Start training on P3',    
+    )
+    print(response)
 
     # Training parameters
     batch_size = 512
-    epochs = 50
+    epochs = 100
     volume_mount_dir = '/dltraining/'
     dataset_path = os.path.join(volume_mount_dir, 'datasets')
     checkpoint_path = os.path.join(volume_mount_dir, 'checkpoints')
@@ -126,6 +134,13 @@ def main():
     # Backup terminal output once training is complete
     shutil.copy2('/var/log/cloud-init-output.log', os.path.join(volume_mount_dir,
                                                                 'cloud-init-output-{}.log'.format(today_date)))
+
+    # Update training termination
+    response = sns.publish(
+        TopicArn='arn:aws:sns:ap-northeast-2:317231741751:SpotExecutionStatus',    
+        Message='Job done - cloud-init-output-{}.log'.format(today_date),    
+    )
+    print(response)
 
 
 if __name__ == "__main__":
