@@ -90,6 +90,7 @@ def define_callbacks(volume_mount_dir, checkpoint_path, checkpoint_names, today_
 
 #%%
 def main():
+    boto3.setup_default_session(region_name='ap-northeast-2')
     sns = boto3.client('sns')
     # Update training termination
     response = sns.publish(
